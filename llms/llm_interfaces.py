@@ -4,12 +4,16 @@ from dotenv import load_dotenv
 from groq import Groq
 
 class from_antropic:
+    '''
+    This class lets you choose form what antorpic
+    models you want to recive response
+    '''
     def __init__(self) -> None:
         load_dotenv()
         self.key = os.getenv("ANTROPIC_API")
 
 
-    def haiku(self, system_prompt: str, context: str):
+    def haiku(self, system_prompt: str, context: str) -> str:
         client = anthropic.Anthropic(
             api_key= self.key
         )
@@ -22,7 +26,7 @@ class from_antropic:
         )
         return message.content
 
-    def sonnet(self, system_prompt: str, context: list[dict]):
+    def sonnet(self, system_prompt: str, context: list[dict]) -> str:
         client = anthropic.Anthropic(
             api_key= self.key
         )
@@ -35,7 +39,7 @@ class from_antropic:
         )
         return message.content
     
-    def opus(self, system_prompt: str, context: str):
+    def opus(self, system_prompt: str, context: str) -> str:
         client = anthropic.Anthropic(
             api_key= self.key
         )
@@ -50,11 +54,15 @@ class from_antropic:
     
 
 class form_groq:
+    '''
+    This class lets you choose what models
+    avelable at groq you want to recive response
+    '''
     def __init__(self) -> None:
         load_dotenv()
         self.key = os.getenv('GROQ')
 
-    def llama3_8b(self, system_prompt: str, context: list[dict]):
+    def llama3_8b(self, system_prompt: str, context: list[dict]) -> str:
         template = {"role": "system", "content": f"{system_prompt}"}
         context.insert(0, template)
         
@@ -67,7 +75,7 @@ class form_groq:
         )
         return response.choices[0].message.content
 
-    def llama3_70b(self, system_prompt: str, context: list[dict]):
+    def llama3_70b(self, system_prompt: str, context: list[dict]) -> str:
         template = {"role": "system", "content": f"{system_prompt}"}
         context.insert(0, template)
         
@@ -80,7 +88,7 @@ class form_groq:
         )
         return response.choices[0].message.content
     
-    def llama2_70b(self, system_prompt: str, context: list[dict]):
+    def llama2_70b(self, system_prompt: str, context: list[dict]) -> str:
         template = {"role": "system", "content": f"{system_prompt}"}
         context.insert(0, template)
         
@@ -93,7 +101,7 @@ class form_groq:
         )
         return response.choices[0].message.content
     
-    def gemma_7B(self, system_prompt: str, context: list[dict]):
+    def gemma_7B(self, system_prompt: str, context: list[dict]) -> str:
         template = {"role": "system", "content": f"{system_prompt}"}
         context.insert(0, template)
         
@@ -106,7 +114,7 @@ class form_groq:
         )
         return response.choices[0].message.content
     
-    def mixtral_8x7B(self, system_prompt: str, context: list[dict]):
+    def mixtral_8x7B(self, system_prompt: str, context: list[dict]) -> str:
         template = {"role": "system", "content": f"{system_prompt}"}
         context.insert(0, template)
         

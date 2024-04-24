@@ -4,16 +4,23 @@ from rich.console import Console
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.theme import Theme
-from rich.prompt import Prompt
-import py
 
 
-def clear_context():
+def clear_context() -> context.context:
     print(f"\033[1m You've cleared the context: \033[0m")
     return context.context
 
+def new_system_prompt() -> str:
+    c.print(f"Type new system prompt:\n", style="bold magenta")
+    new = input('')
+    if len(new) <5:
+        c.print(f"\n Your new prompt was too short at least 5 characters!", style="bold magenta")
+        return new_system_prompt()
+    c.print(f"Your new system prompt is {new}\n", style="bold magenta")
+    return new
 
-def chat(system_prompt: str, user_prompt: str, chat_log: context.context, model):
+
+def chat(system_prompt: str, user_prompt: str, chat_log: context.context, model) -> str:
     chat_log.add_user_message(user_prompt)
     response = model(system_prompt, chat_log.to_list())
     chat_log.add_assistant_message(response)
@@ -21,7 +28,7 @@ def chat(system_prompt: str, user_prompt: str, chat_log: context.context, model)
 
 
 
-def choice_menu_logic():
+def choice_menu_logic() -> function:
     while True:
             c.print(model_menu)
             user_input = input("\n")
@@ -103,7 +110,8 @@ custom_theme = Theme({
     "command": "green",
     "default": "italic"
 })
-c = py.Console()
+c = Console(theme=custom_theme)
+
 
 
 system_prompt = "You are a helpfull assistan with a BRO personality, style you response in mark up but not indide code blocks"
@@ -127,6 +135,9 @@ while True:
         model = choice_menu_logic()
         c.print("\nWelcome! what do you need to know boss?\n", style= "#408000")
         user_prompt = input("")
+    
+    elif user_prompt == "\\s":
+        system_prompt = new_system_prompt()
 
     elif user_prompt == "\\c":
         chat_log = context.context()
