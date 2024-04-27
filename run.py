@@ -1,4 +1,4 @@
-from llms import context,  llm_interfaces
+from llm_interfaces import context, form_groq, from_antropic
 from rich import print
 from rich.console import Console
 from rich.console import Console
@@ -6,9 +6,9 @@ from rich.markdown import Markdown
 from rich.theme import Theme
 
 
-def clear_context() -> context.context:
+def clear_context() -> context:
     print(f"\033[1m You've cleared the context: \033[0m")
-    return context.context
+    return context()
 
 def new_system_prompt() -> str:
     c.print(f"Type new system prompt:\n", style="bold magenta")
@@ -20,55 +20,48 @@ def new_system_prompt() -> str:
     return new
 
 
-def chat(system_prompt: str, user_prompt: str, chat_log: context.context, model) -> str:
+def chat(system_prompt: str, user_prompt: str, chat_log: context, model) -> str:
     chat_log.add_user_message(user_prompt)
     response = model(system_prompt, chat_log.to_list())
     chat_log.add_assistant_message(response)
     return response
 
 
-
-def choice_menu_logic() -> function:
+def choice_menu_logic():
     while True:
             c.print(model_menu)
             user_input = input("\n")
             if user_input == "haiku":
                 c.print(f"\nYou are using {user_input} have fun!!", style="bold magenta")
-
-                return llm_interfaces.from_antropic().haiku
+                return from_antropic().haiku
                 
             elif user_input == "sonnet":
                 c.print(f"\nYou are using {user_input} have fun!!", style="bold magenta")
-
-                return llm_interfaces.from_antropic().sonnet
+                return from_antropic().sonnet
 
             elif user_input == "opus":
                 c.print(f"\nYou are using {user_input} have fun!!", style="bold magenta")
-
-                return llm_interfaces.from_antropic().opus
+                return from_antropic().opus
                 
             elif user_input == "llama3-8b":
                 c.print(f"\nYou are using {user_input} have fun!!", style="bold magenta")
-
-                return llm_interfaces.form_groq().llama3_8b
+                return form_groq().llama3_8b
 
             elif user_input == "llama3-70b":
                 c.print(f"\nYou are using {user_input} have fun!!", style="bold magenta")
-
-                return llm_interfaces.form_groq().llama3_70b
+                return form_groq().llama3_70b
+            
             elif user_input == "llama2-70b":
                 c.print(f"\nYou are using {user_input} have fun!!", style="bold magenta")
-                return llm_interfaces.form_groq().llama2_70b
+                return form_groq().llama2_70b
                 
             elif user_input == "gemma-7B":
                 c.print(f"\nYou are using {user_input} have fun!!", style="bold magenta")
-
-                return llm_interfaces.form_groq().gemma_7B
+                return form_groq().gemma_7B
                 
             elif user_input == "mixtral-8x7B":
                 c.print(f"\nYou are using {user_input} have fun!!", style="bold magenta")
-
-                return llm_interfaces.form_groq().mixtral_8x7B
+                return form_groq().mixtral_8x7B
                 
             else:
                 c.print(f"Invalid model name. Please try again.", style="bold red")
@@ -115,8 +108,8 @@ c = Console(theme=custom_theme)
 
 
 system_prompt = "You are a helpfull assistan with a BRO personality, style you response in mark up but not indide code blocks"
-chat_log = context.context()
-model = llm_interfaces.form_groq().llama3_70b
+chat_log = context()
+model = form_groq().llama3_70b
 
 c.print(main_menu)
 user_prompt = input()
@@ -140,7 +133,7 @@ while True:
         system_prompt = new_system_prompt()
 
     elif user_prompt == "\\c":
-        chat_log = context.context()
+        chat_log = clear_context()
         c.print("Type your first message:\n", style= "bold magenta")
         user_prompt = input("")
 
