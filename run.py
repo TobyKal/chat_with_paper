@@ -2,35 +2,35 @@ from llm_interfaces import Context, Form_groq, From_antropic, Agents
 import os
 
 def clear_terminal():
-    # For Windows
     if os.name == 'nt':
         os.system('cls')
 
 def clear_context() -> Context:
     clear_terminal()
-    print("You've cleared the context:")
+    print("You've cleared the context")
     return Context()
 
 def new_system_prompt() -> str:
-    new = input("Type new system prompt:\n")
+    new = input("Type new system prompt: ")
     if len(new) < 5:
-        print("Your new prompt was too short, at least 5 characters!\n")
+        print("Your new prompt was too short, at least 5 characters!")
         return new_system_prompt()
     print(f"Your new system prompt is {new}\n\n Heloo, how can i help you??\n")
     return new
 
-def chat(user_prompt: str, chat_log: Context) -> str:
-    chat_log.add_user_message(user_prompt)
-    response = Agents().thinker(chat_log.to_list())
-    print(response)
-    chat_log.delete_last_message()
-    new = f"[user]{user_prompt}[/user][thinking]{response}[/thinking][response]"
-    chat_log.add_user_message(new)
-    response = Agents().responder(chat_log.to_list())
-    chat_log.add_assistant_message(response)
-    return response
+def choose_agent():
+    print(agetn_menu)
+    while True:
+        user_input = input("\nEnter the name of choosen agent: ")
+        if user_input == "assistant":
+            return Agents().assistant
+        elif user_input == "reflector":
+            return Agents().reflector
+        else:
+            print("Invalid agent name. Please try again.")
 
 def choice_menu_logic():
+    print(model_menu)
     while True:
         user_input = input("\nEnter the model name: ")
         if user_input == "haiku":
@@ -53,18 +53,27 @@ def choice_menu_logic():
             print("Invalid model name. Please try again.")
 
 
-main_menu = """
-Welcome! What do you need to know boss?[/menu_title]        
+
+
+if __name__ == '__main__':
+
+    main_menu = """
+Welcome! What do you need to know boss?
 \\q - Quit
-\\s- Change system prompt default "Provide brief and precise answers. Elaborate only if requested."
-\\m- Choose chat model default lamma3-70B
+\\a - Choose an agent you would like to converse wiht (default: assistant - normal chat)
 \\c- Clear llms context
 \\mc - Choose model AND clear context
-Enter your command:
-"""
 
-model_menu = """
-Choose a chat model from the list below:[/menu_title]
+\\menu or \\help -  these will print this menu
+
+If you are using standard assistant agent you can specify these parameters:
+\\s- Change system prompt (default: "You are a helpful assistant with a distinguished comedic sense.")
+\\m- Choose chat model (default: lamma3-70B)
+
+Enter your command or prompt:\n\n"""
+
+    model_menu = """
+Choose a chat model from the list below:
 haiku (paid!)
 sonnet (paid!)
 opus (paid!)
@@ -72,44 +81,54 @@ llama3-8b
 llama3-70b
 llama2-70b
 gemma-7B
-mixtral-8x7B
+mixtral-8x7B"""
 
-Enter the models name """
-
-chat_log = Context()
-system_prompt = """You are a proactive and helpful assistant. provide answers to questions or to carry out the tasks efficiently.
+    agetn_menu = """
+Choose an Agent from the list below:
+assistant (This is an ordinary chat. you can customize the system_prompt and choose a model) 
+reflector (This is a double model; it generates one response and then reflects on it)
 """
-model = Form_groq().llama3_70b
 
-print(main_menu)
-user_prompt = input()
 
-while True:
-    if user_prompt == "\\q":
-        print("Exiting the program...")
-        break
-    elif user_prompt == "\\mc":
-        chat_log = clear_context()
-        model = choice_menu_logic()
-        print("\nWelcome! What do you need to know boss?\n")
-        user_prompt = input("")
 
-    elif user_prompt == "\\m":
-        model = choice_menu_logic()
-        print("\nWelcome! What do you need to know boss?\n")
-        user_prompt = input("")
-    
-    elif user_prompt == "\\s":
-        system_prompt = new_system_prompt()
-        user_prompt = input("")
 
-    elif user_prompt == "\\c":
-        chat_log = clear_context()
-        print("Type your first message:\n")
-        user_prompt = input("")
 
-    elif user_prompt == "" or None:
-        user_prompt = input("")
-    else:
-        print("\n", chat(user_prompt, chat_log))
-        user_prompt = input("\n\n")
+    chat_log = Context()
+    system_prompt = """You are a helpful assistant with a distinguished comedic sense."""
+    model = Form_groq().llama3_70b
+    agent = Agents().assistant
+
+    user_prompt = input(main_menu)
+    while True:
+        if user_prompt == "\\q":
+            print("Exiting the program...")
+            break
+        elif user_prompt == "\\mc":
+            chat_log = clear_context()
+            model = choice_menu_logic()
+            user_prompt = input("\nWelcome! What do you need to know boss?\n")
+
+        elif user_prompt == "\\m":
+            model = choice_menu_logic()
+            user_prompt = input("\nWelcome! What do you need to know boss?\n")
+
+        elif user_prompt == "\\menu" or user_prompt == "\\help":
+            user_prompt = input(main_menu)
+        
+        elif user_prompt == "\\a":
+            agent = choose_agent()
+            user_prompt = input("\nWelcome! What do you need to know boss?\n")
+
+        elif user_prompt == "\\s":
+            system_prompt = new_system_prompt()
+            user_prompt = input("")
+
+        elif user_prompt == "\\c":
+            chat_log = clear_context()
+            user_prompt = input("Type your first message:\n\n")
+
+        elif user_prompt == "" or None:
+            user_prompt = input("")
+        else:
+            chat_log = agent(system_prompt, user_prompt, chat_log, model)
+            user_prompt = input("\n\n\n")
