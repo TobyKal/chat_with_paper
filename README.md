@@ -4,7 +4,7 @@ Certainly! Here's your README with some added emojis to enhance the visual appea
 
 # Chat with Paper: LLM Development Semi-sucess 📚🤖
 
-**Update**: This repo’s on hiatus. I’ve teamed up with Langchain for a new chapter. But this place? It’s a snapshot of my LLM journey. 📸
+**Update**: This repo’s on pause ⏸. I’ve teamed up with Langchain for a new chapter. But this place? It’s a snapshot of my LLM journey. 📸
 
 ## About the Project 🛠️
 Chat with Paper was my quest to build an LLM app that would empower users to create stronger LLMs. I chose the path less traveled by skipping Langchain, aiming for a deeper dive into LLM tech. 🏊‍♂️
