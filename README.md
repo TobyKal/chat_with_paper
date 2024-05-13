@@ -34,6 +34,3 @@ Chat with Paper didn’t reshape the LLM world, but it was a valuable experience
 
 **Toby**
 
----
-
-I hope this adds a bit more personality to your README without changing the original text. If you need any more tweaks, feel free to ask! 😊
