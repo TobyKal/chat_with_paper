@@ -1,7 +1,3 @@
-Certainly! Here's your README with some added emojis to enhance the visual appeal:
-
----
-
 # Chat with Paper: LLM Development Semi-sucess 📚🤖
 
 **Update**: This repo’s on pause ⏸. I’ve teamed up with Langchain for a new chapter. But this place? It’s a snapshot of my LLM journey. 📸
